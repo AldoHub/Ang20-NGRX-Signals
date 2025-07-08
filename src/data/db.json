@@ -1,36 +1,20 @@
 {
   "employees": [
     {
-      "id": "207",
-      "name": "Test Employee",
-      "doj": "2025-07-06T02:29:58.569Z",
-      "age": 25,
-      "salary": 1000,
-      "role": "Designer"
+      "id": "995",
+      "name": "albert",
+      "doj": "2025-07-11T05:00:00.000Z",
+      "age": 23,
+      "salary": 20000,
+      "role": "mid dev"
     },
     {
-      "id": 647,
-      "name": "fqfqfqf",
-      "doj": "2025-07-08T03:07:15.142Z",
-      "age": 41,
-      "salary": 441114,
-      "role": "dev"
-    },
-    {
-      "id": 122,
-      "name": "tyra",
-      "doj": "2025-07-24T05:00:00.000Z",
-      "age": 24,
-      "salary": 24000,
-      "role": "UX Designer"
-    },
-    {
-      "id": 407,
-      "name": "jose",
-      "doj": "2025-07-27T05:00:00.000Z",
+      "id": "694",
+      "name": "John",
+      "doj": "2025-07-22T05:00:00.000Z",
       "age": 35,
-      "salary": 65000,
-      "role": "Senior Lead"
+      "salary": 35000,
+      "role": "Web Designer"
     }
   ]
 }

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 //material
 import {MatCardModule} from '@angular/material/card';
 import {MatFormField} from '@angular/material/form-field';
@@ -9,7 +9,7 @@ import {MatLabel } from '@angular/material/form-field';
 import { MatHint } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 
-import {MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 import {ReactiveFormsModule, FormGroup, FormControl, Validators}  from '@angular/forms';
 
@@ -25,11 +25,25 @@ import { CommonModule } from '@angular/common';
   styleUrl: './add-employee.css',
   providers: [provideNativeDateAdapter()]
 })
-export class AddEmployee {
+export class AddEmployee implements OnInit {
 
   constructor() { }
+
+  public isEditMode = false;
+
+
+  ngOnInit(): void {
+    //check if is on edit or create mode - the data will be null if is on create mode
+    if(this.matData){
+      //if data exists, patch the form with the data
+      console.log('edit employee');
+      this.employeeForm.patchValue(this.matData);
+      this.isEditMode = true;
+    }
+  }
   
   dialogRef = inject(MatDialogRef);
+  matData = inject(MAT_DIALOG_DATA);
   employeesService = inject(EmployeeService);
 
   employeeForm = new FormGroup({
@@ -45,27 +59,53 @@ export class AddEmployee {
   //add employee
   addEmployee(){
     if(this.employeeForm.valid){
-        
-        console.log('add employee', this.employeeForm.value);
 
-        let employee_obj: EmployeeModel =  {
+      //assign the employee object
+      let employee_obj: EmployeeModel =  {
           id: this.employeeForm.value.id as number,
           name: this.employeeForm.value.name as string,
           doj: new Date(this.employeeForm.value.doj as Date),
           age: parseInt(this.employeeForm.value.age as string) ,
           salary: parseInt(this.employeeForm.value.salary as string),
           role: this.employeeForm.value.role as string
-        }
+      }
 
-        this.employeesService.createEmployee(employee_obj).subscribe(res => {
-          console.log('create employee', res);
+      if(!this.isEditMode){
+        //create the employee
+         console.log('add employee', this.employeeForm.value);
+         this.employeesService.createEmployee(employee_obj).subscribe(res => {
+            console.log('create employee', res);
+            //update the service signal
+            this.employeesService.employeesSignal.set([...this.employeesService.employeesSignal() ,res]);
+            //update the material table datasource
+            this.employeesService.dataSource.data = [...this.employeesService.dataSource.data, res];
+            this.employeeForm.reset();
+            this.closeDialog();
+         });
+      }else{
+        //edit the employee
+        console.log('edit employee', this.employeeForm.value);
+        this.employeesService.updateEmployee(employee_obj).subscribe(res => {
+          console.log('update employee', res);
           //update the service signal
-          this.employeesService.employeesSignal.set([...this.employeesService.employeesSignal() ,res]);
-          //update the material table datasource
-          this.employeesService.dataSource.data = [...this.employeesService.dataSource.data, res];
-          this.employeeForm.reset();
+          this.employeesService.employeesSignal().map(employee => {
+            if(employee.id === employee_obj.id){
+              //update the employee
+              employee.name = employee_obj.name;
+              employee.doj = employee_obj.doj;
+              employee.age = employee_obj.age;
+              employee.salary = employee_obj.salary;
+              employee.role = employee_obj.role;
+              
+              return employee_obj;
+            }
+            return employee;
+          });
+
           this.closeDialog();
         });
+      }
+       
       
     } 
       

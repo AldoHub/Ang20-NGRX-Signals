@@ -1,5 +1,6 @@
  <div class="form-wrapper">
     <mat-card>
+      
         <mat-card-header>
             <h2>Add Employee</h2>
         </mat-card-header>
@@ -26,7 +27,7 @@
                     <input matInput placeholder="Role" formControlName="role">
                 </mat-form-field>
                 <mat-card-actions>
-                   <button mat-raised-button type="submit">Add</button>
+                   <button mat-raised-button type="submit">{{isEditMode ? 'Edit' : 'Add'}}</button>
                    <button mat-raised-button type="reset" (click)="closeDialog()">Close</button>
                 </mat-card-actions>
                 

@@ -9,6 +9,7 @@ import { EmployeeService } from '../../services/employee-service';
 
 import { EmployeeModel } from '../../models/Employee.model';
 import { CommonModule } from '@angular/common';
+import { filter } from 'rxjs';
 
 
 @Component({
@@ -63,8 +64,19 @@ export class Employee implements OnInit {
   }
 
   //delete employee
-  deleteEmployee(employee: EmployeeModel): void{
-    console.log('delete employee');
+  deleteEmployee(employeeId: number): void{
+    this.employeesService.deleteEmployee(employeeId).subscribe(res => {
+      console.log('delete employee', res);
+      //filter out the employee id to update the shared signal on the service
+      let filteredEmployees = this.employeesService.employeesSignal().filter(employee => employee.id !== employeeId);
+      this.employeesService.employeesSignal.set(filteredEmployees);
+      //reset the service datasource
+      this.employeesService.dataSource.data = filteredEmployees;
+      //update the component datasource
+      this.dataSource = this.employeesService.dataSource;
+      
+    });
+    
   }
 
   //on load
