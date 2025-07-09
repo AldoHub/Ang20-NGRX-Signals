@@ -9,7 +9,10 @@ import { EmployeeService } from '../../services/employee-service';
 
 import { EmployeeModel } from '../../models/Employee.model';
 import { CommonModule } from '@angular/common';
-import { filter } from 'rxjs';
+
+import { Store } from '@ngrx/store';
+import { deleteEmployee, loadAllEmployees } from '../../Store/Employee.Action';
+import { getEmployees } from '../../Store/Employee.Selector';
 
 
 @Component({
@@ -21,7 +24,9 @@ import { filter } from 'rxjs';
 export class Employee implements OnInit {
 
   constructor() { }
- 
+  
+  store = inject(Store<{employees: EmployeeModel[]}>);
+
   employeesService: EmployeeService = inject(EmployeeService);
   //datasource of the component
   dataSource!: MatTableDataSource<EmployeeModel>;
@@ -42,16 +47,36 @@ export class Employee implements OnInit {
 
   //get all employees
   getEmployees(){
-   this.employeesService.getEmployees().subscribe(res => {
-    console.log(res);
-     //update sevice signal to load the inital data
-     this.employeesService.employeesSignal.set(res);
-     //set the service datasource
-     this.employeesService.dataSource.data = res;
-     //set the component datasource
-     this.dataSource = this.employeesService.dataSource;
+
+    //with NGRX store and http service with signals
+    this.store.dispatch(loadAllEmployees()); 
+    this.store.select(getEmployees).subscribe(employees => {
+      console.log(employees)
+       //update sevice signal to load the inital data
+       this.employeesService.employeesSignal.set(employees);
+       //set the service datasource
+       this.employeesService.dataSource.data = employees;
+       //set the component datasource
+       this.dataSource = this.employeesService.dataSource;
     });
-  }
+   
+   
+    /*
+    
+    //with regular http service and signals
+
+    this.employeesService.getEmployees().subscribe(res => {
+      console.log(res);
+      //update sevice signal to load the inital data
+      this.employeesService.employeesSignal.set(res);
+      //set the service datasource
+      this.employeesService.dataSource.data = res;
+      //set the component datasource
+      this.dataSource = this.employeesService.dataSource;
+      
+    })
+     */
+}
 
   //edit employee
   editEmployee(employee: EmployeeModel): void{
@@ -65,6 +90,18 @@ export class Employee implements OnInit {
 
   //delete employee
   deleteEmployee(employeeId: number): void{
+
+    //with NGRX store and http service with signals
+    this.store.dispatch(deleteEmployee({employeeId}));
+    this.store.select(deleteEmployee).subscribe(employees => {
+      console.log('delete employee', employees);
+    })
+
+
+    /*
+    
+    //with regular http service and signals
+    
     this.employeesService.deleteEmployee(employeeId).subscribe(res => {
       console.log('delete employee', res);
       //filter out the employee id to update the shared signal on the service
@@ -76,12 +113,13 @@ export class Employee implements OnInit {
       this.dataSource = this.employeesService.dataSource;
       
     });
-    
+    */
   }
 
   //on load
   ngOnInit(): void {
     this.getEmployees();
+   
   }
 
   

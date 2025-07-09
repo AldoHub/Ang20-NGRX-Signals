@@ -6,6 +6,8 @@ import { provideHttpClient } from '@angular/common/http';
 
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
+import { employeeReducers } from './Store/Employee.Reducer';
+import { EmployeeEffects } from './Store/Employee.Effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,7 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
-    provideStore(),
-    provideEffects()
+    provideStore({'employeesStore': employeeReducers}),
+    provideEffects([EmployeeEffects])
   ]
 };
