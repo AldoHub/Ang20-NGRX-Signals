@@ -12,9 +12,49 @@
       "id": "106",
       "name": "test 2",
       "doj": "2025-07-09T23:32:39.145Z",
-      "age": 36,
+      "age": 35,
+      "salary": 45500,
+      "role": "ux designer"
+    },
+    {
+      "id": "715",
+      "name": "test 3",
+      "doj": "2025-07-10T20:17:25.525Z",
+      "age": 22,
+      "salary": 24000,
+      "role": "Freelancer"
+    },
+    {
+      "id": "921",
+      "name": "test 4",
+      "doj": "2025-07-10T20:18:54.761Z",
+      "age": 12,
+      "salary": 222222,
+      "role": "etc"
+    },
+    {
+      "id": "424",
+      "name": "test 6",
+      "doj": "2025-07-10T20:28:06.158Z",
+      "age": 34,
       "salary": 45000,
-      "role": "designer"
+      "role": "lead dev"
+    },
+    {
+      "id": "482",
+      "name": "test 7",
+      "doj": "2025-07-10T20:28:58.506Z",
+      "age": 34,
+      "salary": 34000,
+      "role": "etc"
+    },
+    {
+      "id": "487",
+      "name": "Martha",
+      "doj": "2025-07-10T20:30:47.156Z",
+      "age": 54,
+      "salary": 36000,
+      "role": "IT Consultant"
     }
   ]
 }

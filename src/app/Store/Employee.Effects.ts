@@ -34,6 +34,7 @@ export class EmployeeEffects {
         ofType(addEmployee),
         exhaustMap(action => this.employeesService.createEmployee(action.employee).pipe(
             map(employee => {
+                console.log('create employee', employee);
                 return addEmployeeSuccess({employee});
             }),
             catchError(error => of(addEmployeeFail({error})))

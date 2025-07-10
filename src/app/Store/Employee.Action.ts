@@ -25,7 +25,7 @@ export const ADD_EMPLOYEE_SUCCESS = 'ADD_EMPLOYEE_SUCCESS';
 export const ADD_EMPLOYEE_FAIL = 'ADD_EMPLOYEE_FAIL';
 
 export const addEmployee = createAction(ADD_EMPLOYEE, props<{employee:EmployeeModel}>());
-export const addEmployeeSuccess = createAction(ADD_EMPLOYEE, props<{employee:EmployeeModel}>());
+export const addEmployeeSuccess = createAction(ADD_EMPLOYEE_SUCCESS, props<{employee:EmployeeModel}>());
 export const addEmployeeFail = createAction(ADD_EMPLOYEE_FAIL, props<{error: any}>());
 
 

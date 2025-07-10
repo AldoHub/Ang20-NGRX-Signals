@@ -36,7 +36,22 @@ const employeeReducer = createReducer(employeeState,
         employeesList: state.employeesList,
         errorMessage: action.error
     })),
-        
+    on(employeeActions.editEmployeeSuccess, (state, action) => ({
+        ...state,
+        employeesList: state.employeesList.map(employee => {
+            if(employee.id === action.employee.id){
+                return action.employee;
+            }
+            return employee;
+        }),
+        errorMessage: ''
+    })),
+    on(employeeActions.editEmployeeFail, (state, action) => ({
+        ...state,
+        employeesList: state.employeesList,
+        errorMessage: action.error
+    })),
+
 );
 
 export function employeeReducers(state: EmployeeState | undefined, action: any) {

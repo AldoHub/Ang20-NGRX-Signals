@@ -18,6 +18,11 @@ import { EmployeeService } from '../../services/employee-service';
 import { EmployeeModel } from '../../models/Employee.model';
 import { CommonModule } from '@angular/common';
 
+import { Store } from '@ngrx/store';
+import { addEmployee, editEmployee } from '../../Store/Employee.Action';
+import { getEmployees } from '../../Store/Employee.Selector';
+
+
 @Component({
   selector: 'app-add-employee',
   imports: [CommonModule, MatCardModule, MatFormField, MatDatepickerModule, MatButtonModule, MatLabel, MatInput, MatHint , MatDatepickerToggle, MatIconModule, MatDatepicker, ReactiveFormsModule],
@@ -29,6 +34,7 @@ export class AddEmployee implements OnInit {
 
   constructor() { }
 
+  store = inject(Store<{employees: EmployeeModel[]}>);
   public isEditMode = false;
 
 
@@ -73,6 +79,18 @@ export class AddEmployee implements OnInit {
       if(!this.isEditMode){
         //create the employee
          console.log('add employee', this.employeeForm.value);
+         
+         //create user with NGRX store and http service with signals
+         this.store.dispatch(addEmployee({employee: employee_obj}));
+         this.store.select(addEmployee).subscribe(employees => {
+           console.log('add employee', employees);
+         })
+         this.employeeForm.reset();
+         this.closeDialog();
+     
+         /*
+         //create user with http service and signals
+
          this.employeesService.createEmployee(employee_obj).subscribe(res => {
             console.log('create employee', res);
             //update the service signal
@@ -82,9 +100,24 @@ export class AddEmployee implements OnInit {
             this.employeeForm.reset();
             this.closeDialog();
          });
+         */
+        
       }else{
         //edit the employee
         console.log('edit employee', this.employeeForm.value);
+        
+        //edit user with NGRX store and http service with signals
+        this.store.dispatch(editEmployee({employee: employee_obj}));
+        this.store.select(editEmployee).subscribe(employees => {
+          console.log('edit employee', employees);
+        })
+        this.closeDialog();
+
+
+        /*
+
+        //edit user with http service and signals
+
         this.employeesService.updateEmployee(employee_obj).subscribe(res => {
           console.log('update employee', res);
           //update the service signal
@@ -101,9 +134,10 @@ export class AddEmployee implements OnInit {
             }
             return employee;
           });
-
+        
           this.closeDialog();
         });
+        */
       }
        
       
